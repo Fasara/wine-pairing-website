@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    background: #faf8f4;
+    color: #2b2d2a;
+  }
+  :focus-visible {
+    outline: 3px solid #3f5139;
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center rounded-md bg-sage-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-sage-800;
+  }
+  .btn-outline {
+    @apply inline-flex items-center justify-center rounded-md border border-sage-700 px-4 py-2 text-sm font-semibold text-sage-800 transition hover:bg-sage-50;
+  }
+  .card {
+    @apply rounded-xl border border-sage-100 bg-white p-4 shadow-sm;
+  }
+  .field {
+    @apply w-full rounded-md border border-sage-600 bg-white px-3 py-2 text-sm text-ink;
+  }
+}

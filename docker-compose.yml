@@ -1,0 +1,46 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-wine}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-wine}
+      POSTGRES_DB: ${POSTGRES_DB:-wine}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build: ./apps/api
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-wine}:${POSTGRES_PASSWORD:-wine}@db:5432/${POSTGRES_DB:-wine}
+      API_PORT: 4000
+      WINE_API_BASE_URL: ${WINE_API_BASE_URL:-https://api.sampleapis.com/wines}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:3000}
+      SYNC_TOKEN: ${SYNC_TOKEN:-change-me}
+      SYNC_ON_STARTUP: ${SYNC_ON_STARTUP:-true}
+    ports:
+      - "4000:4000"
+
+  web:
+    build:
+      context: ./apps/web
+      args:
+        API_URL: http://api:4000
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:4000}
+    depends_on:
+      - api
+    environment:
+      API_URL: http://api:4000
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:4000}
+    ports:
+      - "3000:3000"
+
+volumes:
+  pgdata:

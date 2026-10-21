@@ -1,0 +1,9 @@
+{
+  "moduleFileExtensions": ["js", "json", "ts"],
+  "rootDir": "..",
+  "testRegex": "test/.*\\.e2e-spec\\.ts$",
+  "transform": { "^.+\\.ts$": ["ts-jest", { "tsconfig": "<rootDir>/tsconfig.json", "diagnostics": { "ignoreCodes": [151002] } }] },
+  "collectCoverageFrom": ["src/**/*.ts", "!src/main.ts", "!src/**/*.spec.ts", "!src/database/migrate.ts", "!src/database/seed.ts"],
+  "testEnvironment": "node",
+  "testTimeout": 30000
+}
